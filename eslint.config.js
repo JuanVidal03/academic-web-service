@@ -37,7 +37,8 @@ export default defineConfig([
       "space-infix-ops": "error",
       "eqeqeq": "error",
       "comma-dangle": "error",
-      "space-before-function-paren": "error"
+      "space-before-function-paren": "error",
+      "eol-last": ["error", "always"]
     }
   }
 ]);
