@@ -31,13 +31,19 @@ export default defineConfig([
       "no-extra-semi": "error",
       "camelcase": "error",
       "prefer-const": "error",
-      "no-unused-vars": "error",
+      "no-unused-vars": ["error", {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
+      }],
       "object-curly-spacing": ["error", "always"],
       "keyword-spacing": ["error", { "before": true, "after": true }],
       "space-infix-ops": "error",
       "eqeqeq": "error",
       "comma-dangle": "error",
-      "space-before-function-paren": "error"
+      "space-before-function-paren": "error",
+      "eol-last": ["error", "always"],
+      "indent": ["error", 2],
+      "no-multiple-empty-lines": ["error", { "max": 1 }]
     }
   }
 ]);
