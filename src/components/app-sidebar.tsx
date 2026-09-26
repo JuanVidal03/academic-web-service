@@ -32,80 +32,80 @@ import {
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Usuario",
+    email: "usuario@universidad.edu.co",
     avatar: "/avatars/shadcn.jpg"
   },
   navMain: [
     {
-      title: "Dashboard",
+      title: "Panel",
       url: "#",
       icon: <LayoutDashboardIcon />
     },
     {
-      title: "Lifecycle",
+      title: "Ciclo de vida",
       url: "#",
       icon: <ListIcon />
     },
     {
-      title: "Analytics",
+      title: "Analítica",
       url: "#",
       icon: <ChartBarIcon />
     },
     {
-      title: "Projects",
+      title: "Proyectos",
       url: "#",
       icon: <FolderIcon />
     },
     {
-      title: "Team",
+      title: "Equipo",
       url: "#",
       icon: <UsersIcon />
     }
   ],
   navClouds: [
     {
-      title: "Capture",
+      title: "Captura",
       icon: <CameraIcon />,
       isActive: true,
       url: "#",
       items: [
         {
-          title: "Active Proposals",
+          title: "Propuestas activas",
           url: "#"
         },
         {
-          title: "Archived",
+          title: "Archivadas",
           url: "#"
         }
       ]
     },
     {
-      title: "Proposal",
+      title: "Propuesta",
       icon: <FileTextIcon />,
       url: "#",
       items: [
         {
-          title: "Active Proposals",
+          title: "Propuestas activas",
           url: "#"
         },
         {
-          title: "Archived",
+          title: "Archivadas",
           url: "#"
         }
       ]
     },
     {
-      title: "Prompts",
+      title: "Indicaciones",
       icon: <FileTextIcon />,
       url: "#",
       items: [
         {
-          title: "Active Proposals",
+          title: "Propuestas activas",
           url: "#"
         },
         {
-          title: "Archived",
+          title: "Archivadas",
           url: "#"
         }
       ]
@@ -113,34 +113,34 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Settings",
+      title: "Configuración",
       url: "#",
       icon: <Settings2Icon />
     },
     {
-      title: "Get Help",
+      title: "Obtener ayuda",
       url: "#",
       icon: <CircleHelpIcon />
     },
     {
-      title: "Search",
+      title: "Buscar",
       url: "#",
       icon: <SearchIcon />
     }
   ],
   documents: [
     {
-      name: "Data Library",
+      name: "Biblioteca de datos",
       url: "#",
       icon: <DatabaseIcon />
     },
     {
-      name: "Reports",
+      name: "Informes",
       url: "#",
       icon: <FileChartColumnIcon />
     },
     {
-      name: "Word Assistant",
+      name: "Asistente de Word",
       url: "#",
       icon: <FileIcon />
     }
@@ -158,7 +158,7 @@ export function AppSidebar ({ ...props }: React.ComponentProps<typeof Sidebar>) 
               render={<a href="#" />}
             >
               <CommandIcon className="size-5!" />
-              <span className="text-base font-semibold">Acme Inc.</span>
+              <span className="text-base font-semibold">Web Académica</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
