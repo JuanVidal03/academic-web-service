@@ -26,6 +26,8 @@ import {
   LogOutIcon
 } from "lucide-react";
 
+import { useLogout, useSession } from "@/hooks/use-auth";
+
 export function NavUser ({ user }: {
   user: {
     name: string;
@@ -34,6 +36,13 @@ export function NavUser ({ user }: {
   };
 }) {
   const { isMobile } = useSidebar();
+  const { user: session } = useSession();
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
+
+  // Prefer the signed-in user over whatever was passed in, so the menu cannot show a
+  // stale name once a real session exists.
+  const displayName = session?.email.split("@")[0] ?? user.name;
+  const displayEmail = session?.email ?? user.email;
 
   return (
     <SidebarMenu>
@@ -45,13 +54,13 @@ export function NavUser ({ user }: {
             }
           >
             <Avatar className="size-8 rounded-lg grayscale">
-              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarImage src={user.avatar} alt={displayName} />
               <AvatarFallback className="rounded-lg">CN</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-medium">{user.name}</span>
+              <span className="truncate font-medium">{displayName}</span>
               <span className="truncate text-xs text-foreground/70">
-                {user.email}
+                {displayEmail}
               </span>
             </div>
             <EllipsisVerticalIcon className="ml-auto size-4" />
@@ -66,13 +75,13 @@ export function NavUser ({ user }: {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="size-8">
-                    <AvatarImage src={user.avatar} alt={user.name} />
+                    <AvatarImage src={user.avatar} alt={displayName} />
                     <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
+                    <span className="truncate font-medium">{displayName}</span>
                     <span className="truncate text-xs text-muted-foreground">
-                      {user.email}
+                      {displayEmail}
                     </span>
                   </div>
                 </div>
@@ -94,9 +103,14 @@ export function NavUser ({ user }: {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                logout();
+              }}
+              disabled={isLoggingOut}
+            >
               <LogOutIcon />
-              Cerrar sesión
+              {isLoggingOut ? "Cerrando sesión..." : "Cerrar sesión"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
