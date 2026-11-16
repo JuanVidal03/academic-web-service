@@ -1,3 +1,20 @@
+# Web Académica — dropout prediction client
+
+Frontend for the academic dropout prediction service. React 19, Vite, Tailwind, shadcn/ui,
+with zustand for auth state, TanStack Query for server state and axios for transport.
+
+## Getting started
+
+```bash
+pnpm install
+cp .env.example .env          # VITE_API_URL, defaults to http://localhost:8000
+pnpm dev
+```
+
+The API must be running, and its `CORS_ORIGINS` must list this app's origin
+(`http://localhost:5173`) — a wildcard is rejected because the client sends credentials.
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
