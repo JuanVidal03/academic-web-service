@@ -1,9 +1,17 @@
 import * as React from "react";
+import {
+  ChartBarIcon,
+  CommandIcon,
+  FolderIcon,
+  LayoutDashboardIcon,
+  ListIcon,
+  UsersIcon
+} from "lucide-react";
+import { Link } from "react-router-dom";
 
-import { NavDocuments } from "@/components/nav-documents";
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
+import { NavMain, type NavItem } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
+import { useSession } from "@/hooks/use-auth";
 import {
   Sidebar,
   SidebarContent,
@@ -13,141 +21,26 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar";
-import {
-  CameraIcon,
-  ChartBarIcon,
-  CircleHelpIcon,
-  CommandIcon,
-  DatabaseIcon,
-  FileChartColumnIcon,
-  FileIcon,
-  FileTextIcon,
-  FolderIcon,
-  LayoutDashboardIcon,
-  ListIcon,
-  SearchIcon,
-  Settings2Icon,
-  UsersIcon
-} from "lucide-react";
 
-const data = {
-  user: {
-    name: "Usuario",
-    email: "usuario@universidad.edu.co",
-    avatar: "/avatars/shadcn.jpg"
-  },
-  navMain: [
-    {
-      title: "Panel",
-      url: "#",
-      icon: <LayoutDashboardIcon />
-    },
-    {
-      title: "Ciclo de vida",
-      url: "#",
-      icon: <ListIcon />
-    },
-    {
-      title: "Analítica",
-      url: "#",
-      icon: <ChartBarIcon />
-    },
-    {
-      title: "Proyectos",
-      url: "#",
-      icon: <FolderIcon />
-    },
-    {
-      title: "Equipo",
-      url: "#",
-      icon: <UsersIcon />
-    }
-  ],
-  navClouds: [
-    {
-      title: "Captura",
-      icon: <CameraIcon />,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Propuestas activas",
-          url: "#"
-        },
-        {
-          title: "Archivadas",
-          url: "#"
-        }
-      ]
-    },
-    {
-      title: "Propuesta",
-      icon: <FileTextIcon />,
-      url: "#",
-      items: [
-        {
-          title: "Propuestas activas",
-          url: "#"
-        },
-        {
-          title: "Archivadas",
-          url: "#"
-        }
-      ]
-    },
-    {
-      title: "Indicaciones",
-      icon: <FileTextIcon />,
-      url: "#",
-      items: [
-        {
-          title: "Propuestas activas",
-          url: "#"
-        },
-        {
-          title: "Archivadas",
-          url: "#"
-        }
-      ]
-    }
-  ],
-  navSecondary: [
-    {
-      title: "Configuración",
-      url: "#",
-      icon: <Settings2Icon />
-    },
-    {
-      title: "Obtener ayuda",
-      url: "#",
-      icon: <CircleHelpIcon />
-    },
-    {
-      title: "Buscar",
-      url: "#",
-      icon: <SearchIcon />
-    }
-  ],
-  documents: [
-    {
-      name: "Biblioteca de datos",
-      url: "#",
-      icon: <DatabaseIcon />
-    },
-    {
-      name: "Informes",
-      url: "#",
-      icon: <FileChartColumnIcon />
-    },
-    {
-      name: "Asistente de Word",
-      url: "#",
-      icon: <FileIcon />
-    }
-  ]
-};
+/**
+ * Every entry points at a route that exists. The shadcn scaffolding shipped three extra
+ * groups of `url: "#"` placeholders (navClouds, documents, navSecondary); they were removed
+ * rather than left to look like features that do not work.
+ */
+const NAV_ITEMS: NavItem[] = [
+  { title: "Panel", url: "/dashboard", icon: <LayoutDashboardIcon /> },
+  { title: "Evaluar estudiante", url: "/prediccion", icon: <ChartBarIcon /> },
+  { title: "Evaluar por lotes", url: "/prediccion/lote", icon: <ListIcon /> },
+  { title: "Modelo", url: "/modelo", icon: <FolderIcon /> },
+  { title: "Historial", url: "/historial", icon: <UsersIcon />, adminOnly: true }
+];
 
 export function AppSidebar ({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user, role } = useSession();
+  // Admin-only entries are hidden rather than shown-and-rejected; the route guard still
+  // enforces it for anyone who types the URL.
+  const navItems = NAV_ITEMS.filter((item) => !item.adminOnly || role === "admin");
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -155,7 +48,7 @@ export function AppSidebar ({ ...props }: React.ComponentProps<typeof Sidebar>) 
           <SidebarMenuItem>
             <SidebarMenuButton
               className="data-[slot=sidebar-menu-button]:p-1.5!"
-              render={<a href="#" />}
+              render={<Link to="/dashboard" />}
             >
               <CommandIcon className="size-5!" />
               <span className="text-base font-semibold">Web Académica</span>
@@ -164,14 +57,13 @@ export function AppSidebar ({ ...props }: React.ComponentProps<typeof Sidebar>) 
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain items={navItems} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        {/* NavUser reads the session itself and derives the name and initials from the
+            email; these props are only the fallback for a missing session. */}
+        <NavUser user={{ name: "Usuario", email: user?.email ?? "", avatar: "" }} />
       </SidebarFooter>
     </Sidebar>
   );
 }
-

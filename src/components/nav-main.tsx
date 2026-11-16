@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { CirclePlusIcon } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -6,45 +8,48 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from "@/components/ui/sidebar";
-import { CirclePlusIcon, MailIcon } from "lucide-react";
 
-export function NavMain ({
-  items
-}: {
-  items: {
-    title: string
-    url: string
-    icon?: React.ReactNode
-  }[]
-}) {
+export interface NavItem {
+  title: string;
+  url: string;
+  icon?: React.ReactNode;
+  /** Hidden from advisers; the matching route is admin-guarded too. */
+  adminOnly?: boolean;
+}
+
+/**
+ * The primary navigation.
+ *
+ * Previously decorative: the items rendered but nothing linked anywhere. Each entry is now
+ * a real router Link, and the current route is marked active.
+ */
+export function NavMain ({ items }: { items: NavItem[] }) {
+  const { pathname } = useLocation();
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
+            {/* Base UI composes via `render`, not Radix's `asChild`. */}
             <SidebarMenuButton
-              tooltip="Crear rápido"
+              render={<Link to="/prediccion" />}
+              tooltip="Evaluar estudiante"
               className="min-w-8 bg-primary text-primary-foreground duration-200 ease-linear hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground"
             >
-              <CirclePlusIcon
-              />
-              <span>Crear rápido</span>
+              <CirclePlusIcon />
+              <span>Evaluar estudiante</span>
             </SidebarMenuButton>
-            <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <MailIcon
-              />
-              <span className="sr-only">Bandeja de entrada</span>
-            </Button>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton tooltip={item.title}>
+              <SidebarMenuButton
+                render={<Link to={item.url} />}
+                tooltip={item.title}
+                isActive={pathname === item.url}
+              >
                 {item.icon}
                 <span>{item.title}</span>
               </SidebarMenuButton>

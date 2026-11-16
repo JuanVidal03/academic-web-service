@@ -8,6 +8,10 @@ import { useBootstrapSession } from "@/hooks/use-auth";
 
 const Login = lazy(() => import("@/pages/login/Index"));
 const Dashboard = lazy(() => import("@/pages/dashboard/Index"));
+const Prediction = lazy(() => import("@/pages/prediction/Index"));
+const Batch = lazy(() => import("@/pages/batch/Index"));
+const Model = lazy(() => import("@/pages/model/Index"));
+const History = lazy(() => import("@/pages/history/Index"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -42,6 +46,14 @@ const App = () => {
               <Route path="/" element={<Login />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/prediccion" element={<Prediction />} />
+                <Route path="/prediccion/lote" element={<Batch />} />
+                <Route path="/modelo" element={<Model />} />
+              </Route>
+              {/* The API answers 403 for an adviser; the guard keeps them from even
+                  reaching a page that would only show an error. */}
+              <Route element={<ProtectedRoute requiredRole="admin" />}>
+                <Route path="/historial" element={<History />} />
               </Route>
             </Routes>
           </Suspense>

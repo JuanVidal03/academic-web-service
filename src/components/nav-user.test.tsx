@@ -63,4 +63,38 @@ describe("NavUser", () => {
     const screen = render(<Harness />);
     expect(screen.getByText("test@universidad.edu.co")).toBeTruthy();
   });
+
+  it("shows the account's initials, not the shadcn \"CN\" placeholder", () => {
+    const screen = render(<Harness />);
+
+    expect(screen.getByTestId("avatar-initials").textContent).toBe("TE");
+    expect(screen.queryByText("CN")).toBeNull();
+  });
+
+  it("derives initials from the signed-in session, not the passed-in prop", () => {
+    useAuthStore.setState({
+      accessToken: "a-token",
+      user: { id: 3, email: "juan.vidal@universidad.edu.co", role: "adviser", isActive: true },
+      isBootstrapped: true
+    });
+
+    const screen = render(<Harness />);
+
+    expect(screen.getByTestId("avatar-initials").textContent).toBe("JV");
+  });
+
+  it("offers no menu entry that does nothing", async () => {
+    // Cuenta, Facturación and Notificaciones were shadcn scaffolding with no handlers.
+    // A menu that lists actions which silently do nothing is worse than a short menu.
+    const screen = render(<Harness />);
+
+    fireEvent.click(screen.getByRole("button", { name: /test@universidad\.edu\.co/ }));
+    await screen.findByText("Cerrar sesión");
+
+    for (const dead of ["Cuenta", "Facturación", "Notificaciones"]) {
+      expect(screen.queryByText(dead), `${dead} should be gone`).toBeNull();
+    }
+    // Logout is the only actionable item left.
+    expect(screen.getAllByRole("menuitem")).toHaveLength(1);
+  });
 });
